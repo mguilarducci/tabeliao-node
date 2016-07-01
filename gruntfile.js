@@ -16,8 +16,10 @@ module.exports = function gruntConfig(grunt) {
       options: {
         reporter: 'spec',
         timeout: 30000,
-        colors: true,
-      },
+        colors: true
+      }
     }
   });
+
+  grunt.registerTask('test', ['eslint', 'mochaTest']);
 };
