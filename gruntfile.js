@@ -9,6 +9,15 @@ module.exports = function gruntConfig(grunt) {
 
     eslint: {
       target: files
+    },
+
+    mochaTest: {
+      src: ['test/**/*-test.js'],
+      options: {
+        reporter: 'spec',
+        timeout: 30000,
+        colors: true,
+      },
     }
   });
 };
