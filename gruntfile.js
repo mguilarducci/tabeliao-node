@@ -21,5 +21,12 @@ module.exports = function gruntConfig(grunt) {
     }
   });
 
-  grunt.registerTask('test', ['eslint', 'mochaTest']);
+  grunt.registerTask('test', function task(src) {
+    var path;
+    if (src) {
+      path = 'test/' + src + '-test.js';
+      grunt.config('mochaTest.src', path);
+    }
+    grunt.task.run(['eslint', 'mochaTest']);
+  });
 };
