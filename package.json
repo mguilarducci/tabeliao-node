@@ -14,12 +14,14 @@
     "grunt": "^1.0.1",
     "grunt-eslint": "^18.1.0",
     "grunt-mocha-test": "^0.12.7",
+    "istanbul": "^0.4.4",
     "load-grunt-tasks": "^3.5.0",
     "mocha": "^2.5.3",
     "rewire": "^2.5.2",
     "sinon": "^1.17.4"
   },
   "scripts": {
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test/** -R spec",
     "test": "grunt test -v"
   },
   "author": "Matheus Guilarducci <mguilarducci@gmail.com>",
