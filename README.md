@@ -1,5 +1,8 @@
 # tabelião node
 
+[![Codeship Build][ci-url-badge-master]][ci-url]
+[![Coverage Status][coverage-url-badge-master]][coverage-url]
+
 Biblioteca do [tabelião][tabeliao] para nodejs.
 
 # Pré-requisitos
@@ -28,4 +31,9 @@ Isso mandará três informações para o SD:
 
 - **id**: campo `name` concatenado com `-` e `hostname` da máquina
 - **name**: campo `name` no `package.json`
-- **tags**: array contendo `nodejs` e o campo `version` do `package.json` 
+- **tags**: array contendo `nodejs` e o campo `version` do `package.json`
+
+[ci-url]: https://codeship.com/projects/161445
+[ci-url-badge-master]: https://codeship.com/projects/641f9b50-245d-0134-f619-3a36b972b11f/status?branch=master
+[coverage-url]: https://coveralls.io/bitbucket/stonepayments/tabeliao-node
+[coverage-url-badge-master]: https://coveralls.io/repos/bitbucket/stonepayments/tabeliao-node/badge.svg?branch=master&t=zxE2x8
