@@ -1,3 +1,9 @@
 {
-  "extends": "airbnb-base/legacy"
+  "extends": "airbnb-base/legacy",
+  "globals": {
+    "describe": false,
+    "it": false,
+    "afterEach": false,
+    "beforeEach": false
+  }
 }
