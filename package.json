@@ -21,7 +21,7 @@
     "sinon": "^1.17.4"
   },
   "scripts": {
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test/** -R spec",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test/** -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test": "grunt test -v"
   },
   "author": "Matheus Guilarducci <mguilarducci@gmail.com>",
