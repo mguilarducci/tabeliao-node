@@ -9,21 +9,16 @@ var pkg = require(pkgDir);
 
 var tabeliao = rewire('../lib/tabeliao.js');
 
-var project = {
-  id: os.hostname() + '-' + pkg.name,
-  name: pkg.name,
-  tech: 'nodejs',
-  version: 'v' + pkg.version
-};
-
 var consul = {
   agent: { service: { register: sinon.stub() } }
 };
 
+var version = 'v' + pkg.version;
+
 var serviceData = {
-  id: project.id,
-  name: project.name,
-  tags: [project.tech, project.version]
+  id: os.hostname() + '-' + pkg.name,
+  name: pkg.name,
+  tags: ['nodejs', version]
 };
 
 tabeliao.__set__({
@@ -31,20 +26,8 @@ tabeliao.__set__({
 });
 
 describe('Getting project data', function desc() {
-  it('should return the name correctly', function test() {
-    expect(tabeliao.getProjectData().name).equal(project.name);
-  });
-
-  it('should return the project id correctly', function test() {
-    expect(tabeliao.getProjectData().id).equal(project.id);
-  });
-
-  it('should return tech tag correctly', function test() {
-    expect(tabeliao.getProjectData().tags).to.include(project.tech);
-  });
-
-  it('should return version tag correctly', function test() {
-    expect(tabeliao.getProjectData().tags).to.include(project.version);
+  it('should return the tags correctly', function test() {
+    expect(tabeliao.getProjectData()).to.deep.equal(serviceData);
   });
 
   it('should return the correct object', function test() {
