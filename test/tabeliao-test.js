@@ -83,6 +83,22 @@ describe('Getting project data', function desc() {
   });
 });
 
+describe('Express route', function desc() {
+  var res = {
+    status: function status() { return this; },
+    json: sinon.spy()
+  };
+
+  beforeEach(function setUp() {
+    res.json.reset();
+  });
+
+  it('should return { ok: "ok" }', function test() {
+    tabeliao.expressRoute({}, res);
+    expect(res.json.calledOnce).to.be.true;
+  });
+});
+
 describe('Calling consul agent', function desc() {
   /* eslint no-unused-expressions: 0 */
   beforeEach(function setUp() {
