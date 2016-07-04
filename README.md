@@ -28,7 +28,7 @@ app.set('host', 'host.com');
 app.set('port', '5000');
 app.set('ssl', true);
 
-tabeliao.register(function(err) {
+tabeliao.register(app, function(err) {
   if (err) {
     throw err;
   }
