@@ -8,18 +8,21 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
     "eslint": "^2.13.1",
     "eslint-config-airbnb-base": "^3.0.1",
     "eslint-plugin-import": "^1.9.2",
     "grunt": "^1.0.1",
     "grunt-eslint": "^18.1.0",
     "grunt-mocha-test": "^0.12.7",
+    "istanbul": "^0.4.4",
     "load-grunt-tasks": "^3.5.0",
     "mocha": "^2.5.3",
     "rewire": "^2.5.2",
     "sinon": "^1.17.4"
   },
   "scripts": {
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- test/** -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test": "grunt test -v"
   },
   "author": "Matheus Guilarducci <mguilarducci@gmail.com>",
