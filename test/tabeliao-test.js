@@ -27,8 +27,7 @@ var serviceData = {
 };
 
 tabeliao.__set__({
-  consul: consul,
-  PKG_DIR: pkgDir
+  consul: consul
 });
 
 describe('Getting project data', function desc() {
