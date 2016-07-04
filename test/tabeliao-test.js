@@ -42,10 +42,7 @@ beforeEach(function setUp() {
   app.get.withArgs('ssl').returns('true');
 });
 
-
 describe('Getting check', function desc() {
-
-
   it('should return correct data', function test() {
     expect(tabeliao.getCheck(app)).to.be.deep.equal(serviceData.check);
   });
