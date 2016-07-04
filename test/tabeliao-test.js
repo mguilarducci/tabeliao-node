@@ -18,11 +18,58 @@ var version = 'v' + pkg.version;
 var serviceData = {
   id: os.hostname() + '-' + pkg.name,
   name: pkg.name,
-  tags: ['nodejs', version]
+  tags: ['nodejs', version],
+  check: {
+    http: 'https://host.com:5000/healthcheck',
+    interval: '60s',
+    ttl: '30s'
+  }
+};
+
+var app = {
+  get: sinon.stub()
 };
 
 tabeliao.__set__({
   consul: consul
+});
+
+beforeEach(function setUp() {
+  app.get.reset();
+
+  app.get.withArgs('port').returns('5000');
+  app.get.withArgs('host').returns('host.com');
+  app.get.withArgs('ssl').returns('true');
+});
+
+
+describe('Getting check', function desc() {
+
+
+  it('should return correct data', function test() {
+    expect(tabeliao.getCheck(app)).to.be.deep.equal(serviceData.check);
+  });
+
+  it('should return correct check port default', function test() {
+    app.get.withArgs('port').returns(null);
+
+    expect(tabeliao.getCheck(app).http)
+      .to.be.equal('https://host.com:3000/healthcheck');
+  });
+
+  it('should return correct check default', function test() {
+    app.get.withArgs('ssl').returns(null);
+    app.get.withArgs('host').returns(null);
+    app.get.withArgs('port').returns(null);
+
+    expect(tabeliao.getCheck(app).http)
+      .to.be.equal('http://localhost:3000/healthcheck');
+  });
+
+  it('should return correct check with params', function test() {
+    expect(tabeliao.getCheck(app).http)
+      .to.be.equal('https://host.com:5000/healthcheck');
+  });
 });
 
 describe('Getting project data', function desc() {
@@ -35,12 +82,7 @@ describe('Getting project data', function desc() {
   });
 
   it('should return the serviceData correctly', function test() {
-    expect(tabeliao.getProjectData()).to.deep.equal(serviceData);
-  });
-
-  it('should return the correct object', function test() {
-    var allKeys = ['id', 'name', 'tags'];
-    expect(tabeliao.getProjectData()).to.have.all.keys(allKeys);
+    expect(tabeliao.getProjectData(app)).to.deep.equal(serviceData);
   });
 });
 
@@ -51,7 +93,7 @@ describe('Calling consul agent', function desc() {
   });
 
   it('should register the service', function test(done) {
-    tabeliao.register(function cb(err) {
+    tabeliao.register(app, function cb(err) {
       expect(err).to.not.exist;
       expect(consul.agent.service.register.calledOnce).to.be.true;
       done();
@@ -59,7 +101,7 @@ describe('Calling consul agent', function desc() {
   });
 
   it('should register the service with correct values', function test(done) {
-    tabeliao.register(function cb(err) {
+    tabeliao.register(app, function cb(err) {
       var args = consul.agent.service.register.lastCall.args[0];
       expect(err).to.not.exist;
       expect(args).to.deep.equal(serviceData);
