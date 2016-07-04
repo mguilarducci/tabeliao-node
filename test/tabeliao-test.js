@@ -26,7 +26,15 @@ tabeliao.__set__({
 });
 
 describe('Getting project data', function desc() {
-  it('should return the tags correctly', function test() {
+  it('should return correct id', function test() {
+    expect(tabeliao.getServiceId(pkg)).to.be.equal(serviceData.id);
+  });
+
+  it('should return correct version', function test() {
+    expect(tabeliao.getVersion(pkg)).to.be.equal(serviceData.tags[1]);
+  });
+
+  it('should return the serviceData correctly', function test() {
     expect(tabeliao.getProjectData()).to.deep.equal(serviceData);
   });
 
