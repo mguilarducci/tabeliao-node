@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: 0 */
 /* eslint no-underscore-dangle: ["error", { "allow": ["__set__"] }] */
 
 var expect = require('chai').expect;
@@ -8,10 +9,6 @@ var pkgDir = __dirname + '/../package.json';
 var pkg = require(pkgDir);
 
 var tabeliao = rewire('../lib/tabeliao.js');
-
-var consul = {
-  agent: { service: { register: sinon.stub() } }
-};
 
 var version = 'v' + pkg.version;
 
@@ -30,10 +27,6 @@ var serviceData = {
 var app = {
   get: sinon.stub()
 };
-
-tabeliao.__set__({
-  consul: consul
-});
 
 beforeEach(function setUp() {
   app.get.reset();
@@ -112,25 +105,34 @@ describe('Express route', function desc() {
   });
 });
 
-describe('Calling consul agent', function desc() {
-  /* eslint no-unused-expressions: 0 */
+describe('tabeliao.register', function desc() {
+  var consul = {
+    agent: { service: { register: sinon.stub() } }
+  };
+
+  var options = {
+    app: app,
+    ssl: true,
+    port: '5000',
+    host: 'hostexpress.com'
+  };
+
+  var tabeliaoRevert = tabeliao.__set__({
+    consul: consul
+  });
+
   beforeEach(function setUp() {
     consul.agent.service.register.callsArgAsync(1);
   });
 
-  it('should register the service', function test(done) {
-    tabeliao.register(app, function cb(err) {
-      expect(err).to.not.exist;
-      expect(consul.agent.service.register.calledOnce).to.be.true;
-      done();
-    });
+  after(function tearDown() {
+    tabeliaoRevert();
   });
 
-  it('should register the service with correct values', function test(done) {
-    tabeliao.register(app, function cb(err) {
-      var args = consul.agent.service.register.lastCall.args[0];
+  it('should register the service', function test(done) {
+    tabeliao.register(options, function cb(err) {
       expect(err).to.not.exist;
-      expect(args).to.deep.equal(serviceData);
+      expect(consul.agent.service.register.calledOnce).to.be.true;
       done();
     });
   });
