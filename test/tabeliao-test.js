@@ -64,22 +64,6 @@ describe('Getting check', function desc() {
 });
 
 describe('Getting project data', function desc() {
-  it('should return correct id', function test() {
-    expect(tabeliao.getServiceId(pkg)).to.be.equal(serviceData.id);
-  });
-
-  it('should return correct port', function test() {
-    expect(tabeliao.getPort(app)).to.be.equal('5000');
-  });
-
-  it('should return correct host', function test() {
-    expect(tabeliao.getHost(app)).to.be.equal('host.com');
-  });
-
-  it('should return correct protocol', function test() {
-    expect(tabeliao.getProtocol(app)).to.be.equal('https');
-  });
-
   it('should return the serviceData correctly', function test() {
     expect(tabeliao.getProjectData(app)).to.deep.equal(serviceData);
   });
@@ -184,5 +168,60 @@ describe('tabeliao.getProtocol', function desc() {
 
   it('should return http as default', function test() {
     expect(tabeliao.getProtocol()).to.be.equal('http');
+  });
+});
+
+describe('tabeliao.getCheck', function desc() {
+  var options = {
+    ssl: true,
+    port: '5000',
+    host: 'hostexpress.com'
+  };
+
+  var result = {
+    ttl: '30s',
+    interval: '60s',
+    http: 'https://hostexpress.com:5000/healthcheck'
+  };
+
+  it('should return correct check object', function test() {
+    expect(tabeliao.getCheck(options)).to.be.deep.equal(result);
+  });
+});
+
+describe('tabeliao.getServiceData', function desc() {
+  it('should return consul format service data', function test() {
+    var options = {
+      app: app,
+      ssl: true,
+      port: '5000',
+      host: 'hostexpress.com'
+    };
+
+    var result = {
+      port: '5000',
+      name: pkg.name,
+      id: os.hostname() + '-' + pkg.name,
+      tags: ['nodejs', 'v' + pkg.version],
+      check: {
+        ttl: '30s',
+        interval: '60s',
+        http: 'https://hostexpress.com:5000/healthcheck'
+      }
+    };
+
+    expect(tabeliao.getServiceData(options)).to.deep.equal(result);
+  });
+
+  it('should throw an error if package.json does not exist', function test() {
+    var stub = sinon.stub();
+    var revert = tabeliao.__set__('findPackageJson', stub);
+    stub.withArgs().returns('caminholouco');
+
+    expect(function err() {
+      tabeliao.getServiceData();
+    }).to.throw(/Invalid package.json/);
+
+    revert();
   });
 });
