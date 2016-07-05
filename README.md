@@ -8,24 +8,39 @@ Biblioteca do [tabelião][tabeliao] para nodejs.
 # Pré-requisitos
 
 É necessário ter um `package.json` válido e com as chaves `name` e `version`.
+Sua aplicação não pode ter uma rota `/healthcheck`. Ela é criada automaticamente pelo tabelião.
 
 # Funcionamento
 
 No bootstrap da aplicação o tabelião procurará o `package.json` mais próximo da pasta em que o processo está rodando para utilizar as informações para o SD no endereço default do Consul.
+
+O tabelião criará uma rota `/healthcheck` e irá fazer um `GET` nela uma vez por minuto para verificar se o serviço está disponível.
 
 # Uso
 
 Coloque o código a seguir no arquivo de bootstrap da sua aplicação:
 
 ```javascript
+var app = require('express')();
+// ....
 var tabeliao = require('tabeliao');
+app.set('host', 'host.com');
+app.set('port', '5000');
+app.set('ssl', true);
 
-tabeliao.register(function(err) {
+tabeliao.register(app, function(err) {
   if (err) {
     throw err;
   }
 });
 ```
+
+NOTA: setar as variáveis no express é opcional.
+Os valores default são:
+
+- **host**: localhost
+- **port**: 3000
+- **ssl**: false
 
 Isso mandará três informações para o SD:
 
