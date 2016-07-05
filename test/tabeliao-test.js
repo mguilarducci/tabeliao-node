@@ -16,9 +16,10 @@ var consul = {
 var version = 'v' + pkg.version;
 
 var serviceData = {
-  id: os.hostname() + '-' + pkg.name,
+  port: '5000',
   name: pkg.name,
   tags: ['nodejs', version],
+  id: os.hostname() + '-' + pkg.name,
   check: {
     http: 'https://host.com:5000/healthcheck',
     interval: '60s',
