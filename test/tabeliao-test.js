@@ -10,65 +10,6 @@ var pkg = require(pkgDir);
 
 var tabeliao = rewire('../lib/tabeliao.js');
 
-var version = 'v' + pkg.version;
-
-var serviceData = {
-  port: '5000',
-  name: pkg.name,
-  tags: ['nodejs', version],
-  id: os.hostname() + '-' + pkg.name,
-  check: {
-    http: 'https://host.com:5000/healthcheck',
-    interval: '60s',
-    ttl: '30s'
-  }
-};
-
-var app = {
-  get: sinon.stub()
-};
-
-beforeEach(function setUp() {
-  app.get.reset();
-
-  app.get.withArgs('port').returns('5000');
-  app.get.withArgs('host').returns('host.com');
-  app.get.withArgs('ssl').returns('true');
-});
-
-describe('Getting check', function desc() {
-  it('should return correct data', function test() {
-    expect(tabeliao.getCheck(app)).to.be.deep.equal(serviceData.check);
-  });
-
-  it('should return correct check port default', function test() {
-    app.get.withArgs('port').returns(null);
-
-    expect(tabeliao.getCheck(app).http)
-      .to.be.equal('https://host.com:3000/healthcheck');
-  });
-
-  it('should return correct check default', function test() {
-    app.get.withArgs('ssl').returns(null);
-    app.get.withArgs('host').returns(null);
-    app.get.withArgs('port').returns(null);
-
-    expect(tabeliao.getCheck(app).http)
-      .to.be.equal('http://localhost:3000/healthcheck');
-  });
-
-  it('should return correct check with params', function test() {
-    expect(tabeliao.getCheck(app).http)
-      .to.be.equal('https://host.com:5000/healthcheck');
-  });
-});
-
-describe('Getting project data', function desc() {
-  it('should return the serviceData correctly', function test() {
-    expect(tabeliao.getProjectData(app)).to.deep.equal(serviceData);
-  });
-});
-
 describe('tabeliao.expressRoute', function desc() {
   var res = {
     status: function status() { return this; },
@@ -91,7 +32,6 @@ describe('tabeliao.register', function desc() {
   };
 
   var options = {
-    app: app,
     ssl: true,
     port: '5000',
     host: 'hostexpress.com'
@@ -192,7 +132,6 @@ describe('tabeliao.getCheck', function desc() {
 describe('tabeliao.getServiceData', function desc() {
   it('should return consul format service data', function test() {
     var options = {
-      app: app,
       ssl: true,
       port: '5000',
       host: 'hostexpress.com'
@@ -223,5 +162,15 @@ describe('tabeliao.getServiceData', function desc() {
     }).to.throw(/Invalid package.json/);
 
     revert();
+  });
+});
+
+describe('tabeliao.createRoute', function desc() {
+  var app = { get: sinon.spy() };
+
+  it('should create the express route', function test() {
+    createRoute(app);
+    expect(app.get.calledWith('/healthcheck', tabeliao.expressRoute))
+      .to.be.true;
   });
 });
