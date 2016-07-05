@@ -48,6 +48,7 @@ Isso mandará três informações para o SD:
 - **name**: campo `name` no `package.json`
 - **tags**: array contendo `nodejs` e o campo `version` do `package.json`
 
+[tabeliao]: https://bitbucket.org/stonepayments/tabeliao/
 [ci-url]: https://codeship.com/projects/161445
 [ci-url-badge-master]: https://codeship.com/projects/641f9b50-245d-0134-f619-3a36b972b11f/status?branch=master
 [coverage-url]: https://coveralls.io/bitbucket/stonepayments/tabeliao-node
