@@ -78,6 +78,18 @@ describe('Getting project data', function desc() {
     expect(tabeliao.getVersion(pkg)).to.be.equal(serviceData.tags[1]);
   });
 
+  it('should return correct port', function test() {
+    expect(tabeliao.getPort(app)).to.be.equal('5000');
+  });
+
+  it('should return correct host', function test() {
+    expect(tabeliao.getHost(app)).to.be.equal('host.com');
+  });
+
+  it('should return correct protocol', function test() {
+    expect(tabeliao.getProtocol(app)).to.be.equal('https');
+  });
+
   it('should return the serviceData correctly', function test() {
     expect(tabeliao.getProjectData(app)).to.deep.equal(serviceData);
   });
