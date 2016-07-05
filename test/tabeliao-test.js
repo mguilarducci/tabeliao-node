@@ -56,6 +56,43 @@ describe('tabeliao.register', function desc() {
       done();
     });
   });
+
+  it('should get options', function test(done) {
+    var spy = sinon.spy();
+    var revert = tabeliao.__set__('getServiceData', spy);
+
+    tabeliao.register(options, function cb(err) {
+      expect(err).to.not.exist;
+      expect(spy.calledWith(options)).to.be.true;
+      revert();
+      done();
+    });
+  });
+
+  it('should not create route if app does not exist', function test(done) {
+    var spy = sinon.spy();
+    var revert = tabeliao.__set__('createRoute', spy);
+
+    tabeliao.register(options, function cb(err) {
+      expect(err).to.not.exist;
+      expect(spy.called).to.be.false;
+      revert();
+      done();
+    });
+  });
+
+  it('should create route if app exists', function test(done) {
+    var spy = sinon.spy();
+    var revert = tabeliao.__set__('createRoute', spy);
+    var app = { get: 1 };
+
+    tabeliao.register({ app: app }, function cb(err) {
+      expect(err).to.not.exist;
+      expect(spy.calledWith(app)).to.be.true;
+      revert();
+      done();
+    });
+  });
 });
 
 describe('tabeliao.getVersion', function desc() {
@@ -169,7 +206,7 @@ describe('tabeliao.createRoute', function desc() {
   var app = { get: sinon.spy() };
 
   it('should create the express route', function test() {
-    createRoute(app);
+    tabeliao.createRoute(app);
     expect(app.get.calledWith('/healthcheck', tabeliao.expressRoute))
       .to.be.true;
   });
