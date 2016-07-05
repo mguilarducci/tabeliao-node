@@ -69,7 +69,7 @@ describe('Getting project data', function desc() {
   });
 });
 
-describe('Express route', function desc() {
+describe('tabeliao.expressRoute', function desc() {
   var res = {
     status: function status() { return this; },
     json: sinon.spy()
