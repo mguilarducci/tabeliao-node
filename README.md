@@ -16,6 +16,8 @@ No bootstrap da aplicação o tabelião procurará o `package.json` mais próxim
 
 O tabelião criará uma rota `/healthcheck` e irá fazer um `GET` nela uma vez por minuto para verificar se o serviço está disponível.
 
+NOTA: a rota só será criada se a `app` do express for passada no `options`.
+
 # Uso
 
 Coloque o código a seguir no arquivo de bootstrap da sua aplicação:
@@ -24,11 +26,15 @@ Coloque o código a seguir no arquivo de bootstrap da sua aplicação:
 var app = require('express')();
 // ....
 var tabeliao = require('tabeliao');
-app.set('host', 'host.com');
-app.set('port', '5000');
-app.set('ssl', true);
 
-tabeliao.register(app, function(err) {
+var options = {
+  ssl: true,
+  host: 'localhost',
+  port: '3000',
+  app: app
+};
+
+tabeliao.register(options, function(err) {
   if (err) {
     throw err;
   }
