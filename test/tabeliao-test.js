@@ -37,15 +37,16 @@ describe('tabeliao.register', function desc() {
     host: 'hostexpress.com'
   };
 
-  var tabeliaoRevert = tabeliao.__set__({
-    consul: consul
-  });
+  var tabeliaoRevert;
 
   beforeEach(function setUp() {
+    tabeliaoRevert = tabeliao.__set__({
+      consul: consul
+    });
     consul.agent.service.register.callsArgAsync(1);
   });
 
-  after(function tearDown() {
+  afterEach(function tearDown() {
     tabeliaoRevert();
   });
 
@@ -209,5 +210,93 @@ describe('tabeliao.createRoute', function desc() {
     tabeliao.createRoute(app);
     expect(app.get.calledWith('/healthcheck', tabeliao.expressRoute))
       .to.be.true;
+  });
+});
+
+// describe('tabeliao.getDependencies', function desc() {
+//   var consul = { kv: { get: sinon.stub() } };
+//
+//   var revert;
+//
+//   beforeEach(function setUp() {
+//     revert = tabeliao.__set__({
+//       consul: consul
+//     });
+//     consul.kv.get.callsArgAsync(1);
+//   });
+//
+//   afterEach(function tearDown() {
+//     revert();
+//   });
+//
+//   it('should get the service address', function test(done) {
+//     tabeliao.getDependencies(['google'], function cb(err) {
+//       expect(err).to.not.exist;
+//
+//       expect(consul.kv.get.calledOnce).to.be.true;
+//       expect(consul.kv.get.calledWith('services/google/address'))
+//         .to.be.true;
+//       done();
+//     });
+//   });
+// });
+describe('tabeliao.getKeyValue', function desc() {
+  var revert;
+  var consul = { kv: { get: sinon.stub() } };
+
+  beforeEach(function setUp() {
+    revert = tabeliao.__set__('consul', consul);
+  });
+
+  afterEach(function tearDown() {
+    revert();
+  });
+
+  it('should get the service address', function test(done) {
+    consul.kv.get.callsArgWith(1, null, { Value: 'ABC' });
+    tabeliao.getKeyValue('google', function cb(err) {
+      expect(err).to.not.exist;
+
+      expect(consul.kv.get.calledOnce).to.be.true;
+      expect(consul.kv.get.calledWith('services/google/address'))
+       .to.be.true;
+      done();
+    });
+  });
+
+  it('should get the service address', function test(done) {
+    consul.kv.get.callsArgWith(1, null, { Value: 'ABC' });
+    tabeliao.getKeyValue('google', function cb(err, result) {
+      expect(err).to.not.exist;
+
+      expect(result).to.deep.equal({
+        name: 'google',
+        address: 'ABC'
+      });
+
+      done();
+    });
+  });
+});
+
+describe('tabeliao.getDependencies', function desc() {
+  var revert;
+  var async = { map: sinon.stub() };
+
+  beforeEach(function setUp() {
+    revert = tabeliao.__set__('async', async);
+    async.map.callsArg(2);
+  });
+
+  afterEach(function tearDown() {
+    revert();
+  });
+
+  it('should call async map', function test(done) {
+    tabeliao.getDependencies(['test'], function cb() {
+      expect(async.map.calledWith(['test'], tabeliao.getKeyValue))
+        .to.be.true;
+      done();
+    });
   });
 });

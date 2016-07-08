@@ -4,6 +4,7 @@
   "description": "Node library that register services into a service discovery",
   "main": "index.js",
   "dependencies": {
+    "async": "^2.0.0-rc.6",
     "consul": "^0.25.0"
   },
   "devDependencies": {
