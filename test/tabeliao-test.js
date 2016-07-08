@@ -252,7 +252,7 @@ describe('tabeliao.getKeyValue', function desc() {
     revert();
   });
 
-  it('should get the service address', function test(done) {
+  it('should call consul', function test(done) {
     consul.kv.get.callsArgWith(1, null, { Value: 'ABC' });
     tabeliao.getKeyValue('google', function cb(err) {
       expect(err).to.not.exist;
@@ -264,7 +264,7 @@ describe('tabeliao.getKeyValue', function desc() {
     });
   });
 
-  it('should get the service address', function test(done) {
+  it('should return the correct object', function test(done) {
     consul.kv.get.callsArgWith(1, null, { Value: 'ABC' });
     tabeliao.getKeyValue('google', function cb(err, result) {
       expect(err).to.not.exist;
@@ -274,6 +274,14 @@ describe('tabeliao.getKeyValue', function desc() {
         address: 'ABC'
       });
 
+      done();
+    });
+  });
+
+  it('should return an error', function test(done) {
+    consul.kv.get.callsArgWith(1, { err: 'err' });
+    tabeliao.getKeyValue('google', function cb(err) {
+      expect(err).to.deep.equal({ err: 'err' });
       done();
     });
   });
