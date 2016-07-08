@@ -258,7 +258,7 @@ describe('tabeliao.getKeyValue', function desc() {
       expect(err).to.not.exist;
 
       expect(consul.kv.get.calledOnce).to.be.true;
-      expect(consul.kv.get.calledWith('services/google/address'))
+      expect(consul.kv.get.calledWith('google'))
        .to.be.true;
       done();
     });
@@ -270,8 +270,8 @@ describe('tabeliao.getKeyValue', function desc() {
       expect(err).to.not.exist;
 
       expect(result).to.deep.equal({
-        name: 'google',
-        data: 'ABC'
+        key: 'google',
+        value: 'ABC'
       });
 
       done();
@@ -284,8 +284,8 @@ describe('tabeliao.getKeyValue', function desc() {
       expect(err).to.not.exist;
 
       expect(result).to.deep.equal({
-        name: 'google',
-        data: null
+        key: 'google',
+        value: null
       });
 
       done();
@@ -298,8 +298,8 @@ describe('tabeliao.getKeyValue', function desc() {
       expect(err).to.not.exist;
 
       expect(result).to.deep.equal({
-        name: 'google',
-        data: null
+        key: 'google',
+        value: null
       });
 
       done();
