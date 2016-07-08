@@ -271,17 +271,37 @@ describe('tabeliao.getKeyValue', function desc() {
 
       expect(result).to.deep.equal({
         name: 'google',
-        address: 'ABC'
+        data: 'ABC'
       });
 
       done();
     });
   });
 
-  it('should return an error', function test(done) {
+  it('should return address empty if error', function test(done) {
     consul.kv.get.callsArgWith(1, { err: 'err' });
-    tabeliao.getKeyValue('google', function cb(err) {
-      expect(err).to.deep.equal({ err: 'err' });
+    tabeliao.getKeyValue('google', function cb(err, result) {
+      expect(err).to.not.exist;
+
+      expect(result).to.deep.equal({
+        name: 'google',
+        data: null
+      });
+
+      done();
+    });
+  });
+
+  it('should return an error if the value is empty', function test(done) {
+    consul.kv.get.callsArgWith(1, null, null);
+    tabeliao.getKeyValue('google', function cb(err, result) {
+      expect(err).to.not.exist;
+
+      expect(result).to.deep.equal({
+        name: 'google',
+        data: null
+      });
+
       done();
     });
   });
