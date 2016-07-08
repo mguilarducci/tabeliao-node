@@ -253,8 +253,8 @@ describe('tabeliao.getKeyValue', function desc() {
   });
 
   it('should call consul', function test(done) {
-    consul.kv.get.callsArgWith(1, null, { Value: 'ABC' });
-    tabeliao.getKeyValue('google', function cb(err) {
+    consul.kv.get.callsArgWith(1, null, { Value: '{"ok": "ABC"}' });
+    tabeliao.getKeyValue({}, 'google', function cb(err) {
       expect(err).to.not.exist;
 
       expect(consul.kv.get.calledOnce).to.be.true;
@@ -265,27 +265,25 @@ describe('tabeliao.getKeyValue', function desc() {
   });
 
   it('should return the correct object', function test(done) {
-    consul.kv.get.callsArgWith(1, null, { Value: 'ABC' });
-    tabeliao.getKeyValue('google', function cb(err, result) {
+    consul.kv.get.callsArgWith(1, null, { Value: '{"ok": "ABC"}' });
+    tabeliao.getKeyValue({}, 'google', function cb(err, result) {
       expect(err).to.not.exist;
 
       expect(result).to.deep.equal({
-        key: 'google',
-        value: 'ABC'
+        google: { ok: 'ABC' }
       });
 
       done();
     });
   });
 
-  it('should return address empty if error', function test(done) {
+  it('should return key empty if error', function test(done) {
     consul.kv.get.callsArgWith(1, { err: 'err' });
-    tabeliao.getKeyValue('google', function cb(err, result) {
+    tabeliao.getKeyValue({}, 'google', function cb(err, result) {
       expect(err).to.not.exist;
 
       expect(result).to.deep.equal({
-        key: 'google',
-        value: null
+        google: null
       });
 
       done();
@@ -294,12 +292,11 @@ describe('tabeliao.getKeyValue', function desc() {
 
   it('should return an error if the value is empty', function test(done) {
     consul.kv.get.callsArgWith(1, null, null);
-    tabeliao.getKeyValue('google', function cb(err, result) {
+    tabeliao.getKeyValue({}, 'google', function cb(err, result) {
       expect(err).to.not.exist;
 
       expect(result).to.deep.equal({
-        key: 'google',
-        value: null
+        google: null
       });
 
       done();
@@ -309,11 +306,11 @@ describe('tabeliao.getKeyValue', function desc() {
 
 describe('tabeliao.getDependencies', function desc() {
   var revert;
-  var async = { map: sinon.stub() };
+  var async = { reduce: sinon.stub() };
 
   beforeEach(function setUp() {
     revert = tabeliao.__set__('async', async);
-    async.map.callsArg(2);
+    async.reduce.callsArg(3);
   });
 
   afterEach(function tearDown() {
@@ -322,7 +319,7 @@ describe('tabeliao.getDependencies', function desc() {
 
   it('should call async map', function test(done) {
     tabeliao.getDependencies(['test'], function cb() {
-      expect(async.map.calledWith(['test'], tabeliao.getKeyValue))
+      expect(async.reduce.calledWith(['test'], {}, tabeliao.getKeyValue))
         .to.be.true;
       done();
     });
