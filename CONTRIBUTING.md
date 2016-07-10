@@ -30,6 +30,7 @@ npm test
 - Escreva no presente e no modo imperativo ('Adiciona estrela que pisca')
 - Limite a primeira linha com 72 caracteres
 - Referencie issues ou pull requests
+- Adicione `[skip ci]` na mensagem de commit se for um commit de documentação
 - Considere usar os emojis:
   * :art: `:art:` quando melhorar a estrutura/formato do código
   * :racehorse: `:racehorse:` quando melhorar a performance
