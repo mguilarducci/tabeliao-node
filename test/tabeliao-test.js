@@ -37,15 +37,16 @@ describe('tabeliao.register', function desc() {
     host: 'hostexpress.com'
   };
 
-  var tabeliaoRevert = tabeliao.__set__({
-    consul: consul
-  });
+  var tabeliaoRevert;
 
   beforeEach(function setUp() {
+    tabeliaoRevert = tabeliao.__set__({
+      consul: consul
+    });
     consul.agent.service.register.callsArgAsync(1);
   });
 
-  after(function tearDown() {
+  afterEach(function tearDown() {
     tabeliaoRevert();
   });
 
@@ -209,5 +210,104 @@ describe('tabeliao.createRoute', function desc() {
     tabeliao.createRoute(app);
     expect(app.get.calledWith('/healthcheck', tabeliao.expressRoute))
       .to.be.true;
+  });
+});
+
+describe('tabeliao.getKeyValue', function desc() {
+  var revert;
+  var consul = { kv: { get: sinon.stub() } };
+
+  beforeEach(function setUp() {
+    revert = tabeliao.__set__('consul', consul);
+  });
+
+  afterEach(function tearDown() {
+    revert();
+  });
+
+  it('should call consul', function test(done) {
+    consul.kv.get.callsArgWith(1, null, { Value: '{"ok": "ABC"}' });
+    tabeliao.getKeyValue({}, 'google', function cb(err) {
+      expect(err).to.not.exist;
+
+      expect(consul.kv.get.calledOnce).to.be.true;
+      expect(consul.kv.get.calledWith('google'))
+       .to.be.true;
+      done();
+    });
+  });
+
+  it('should return the correct object', function test(done) {
+    consul.kv.get.callsArgWith(1, null, { Value: '{"ok": "ABC"}' });
+    tabeliao.getKeyValue({}, 'google', function cb(err, result) {
+      expect(err).to.not.exist;
+
+      expect(result).to.deep.equal({
+        google: { ok: 'ABC' }
+      });
+
+      done();
+    });
+  });
+
+  it('should return key empty if error', function test(done) {
+    consul.kv.get.callsArgWith(1, { err: 'err' });
+    tabeliao.getKeyValue({}, 'google', function cb(err, result) {
+      expect(err).to.not.exist;
+
+      expect(result).to.deep.equal({
+        google: null
+      });
+
+      done();
+    });
+  });
+
+  it('should return null if the value does not exist', function test(done) {
+    consul.kv.get.callsArgWith(1, null, null);
+    tabeliao.getKeyValue({}, 'google', function cb(err, result) {
+      expect(err).to.not.exist;
+
+      expect(result).to.deep.equal({
+        google: null
+      });
+
+      done();
+    });
+  });
+
+  it('should return value as string if it is not a json', function test(done) {
+    consul.kv.get.callsArgWith(1, null, { Value: 'ABC ABC: { EPA }' });
+    tabeliao.getKeyValue({}, 'google', function cb(err, result) {
+      expect(err).to.not.exist;
+
+      expect(result).to.deep.equal({
+        google: 'ABC ABC: { EPA }'
+      });
+
+      done();
+    });
+  });
+});
+
+describe('tabeliao.getDependencies', function desc() {
+  var revert;
+  var async = { reduce: sinon.stub() };
+
+  beforeEach(function setUp() {
+    revert = tabeliao.__set__('async', async);
+    async.reduce.callsArg(3);
+  });
+
+  afterEach(function tearDown() {
+    revert();
+  });
+
+  it('should call async map', function test(done) {
+    tabeliao.getDependencies(['test'], function cb() {
+      expect(async.reduce.calledWith(['test'], {}, tabeliao.getKeyValue))
+        .to.be.true;
+      done();
+    });
   });
 });
