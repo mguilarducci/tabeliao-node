@@ -213,33 +213,6 @@ describe('tabeliao.createRoute', function desc() {
   });
 });
 
-// describe('tabeliao.getDependencies', function desc() {
-//   var consul = { kv: { get: sinon.stub() } };
-//
-//   var revert;
-//
-//   beforeEach(function setUp() {
-//     revert = tabeliao.__set__({
-//       consul: consul
-//     });
-//     consul.kv.get.callsArgAsync(1);
-//   });
-//
-//   afterEach(function tearDown() {
-//     revert();
-//   });
-//
-//   it('should get the service address', function test(done) {
-//     tabeliao.getDependencies(['google'], function cb(err) {
-//       expect(err).to.not.exist;
-//
-//       expect(consul.kv.get.calledOnce).to.be.true;
-//       expect(consul.kv.get.calledWith('services/google/address'))
-//         .to.be.true;
-//       done();
-//     });
-//   });
-// });
 describe('tabeliao.getKeyValue', function desc() {
   var revert;
   var consul = { kv: { get: sinon.stub() } };
