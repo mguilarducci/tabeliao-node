@@ -290,13 +290,26 @@ describe('tabeliao.getKeyValue', function desc() {
     });
   });
 
-  it('should return an error if the value is empty', function test(done) {
+  it('should return null if the value does not exist', function test(done) {
     consul.kv.get.callsArgWith(1, null, null);
     tabeliao.getKeyValue({}, 'google', function cb(err, result) {
       expect(err).to.not.exist;
 
       expect(result).to.deep.equal({
         google: null
+      });
+
+      done();
+    });
+  });
+
+  it('should return value as string if it is not a json', function test(done) {
+    consul.kv.get.callsArgWith(1, null, { Value: 'ABC ABC: { EPA }' });
+    tabeliao.getKeyValue({}, 'google', function cb(err, result) {
+      expect(err).to.not.exist;
+
+      expect(result).to.deep.equal({
+        google: 'ABC ABC: { EPA }'
       });
 
       done();
