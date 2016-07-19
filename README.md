@@ -1,7 +1,9 @@
 # tabelião node
 
-[![Codeship Build][ci-url-badge-master]][ci-url]
-[![Coverage Status][coverage-url-badge-master]][coverage-url]
+[![Build Status][ci-image]][ci-url]
+[![Coverage Status][coverage-image]][coverage-url]
+[![Dependencies][dependencies-image]][dependencies-url]
+[![Dev dependencies][dependencies-dev-image]][dependencies-dev-url]
 
 Biblioteca do [tabelião][tabeliao] para nodejs.
 
@@ -101,7 +103,11 @@ E o result será:
 ```
 
 [tabeliao]: https://bitbucket.org/stonepayments/tabeliao/
-[ci-url]: https://codeship.com/projects/161445
-[ci-url-badge-master]: https://codeship.com/projects/641f9b50-245d-0134-f619-3a36b972b11f/status?branch=master
-[coverage-url]: https://coveralls.io/bitbucket/stonepayments/tabeliao-node
-[coverage-url-badge-master]: https://coveralls.io/repos/bitbucket/stonepayments/tabeliao-node/badge.svg?branch=master&t=zxE2x8
+[ci-url]: https://travis-ci.org/mguilarducci/tabeliao-node
+[ci-image]: https://travis-ci.org/mguilarducci/tabeliao-node.svg?branch=master
+[coverage-url]: https://coveralls.io/github/mguilarducci/tabeliao-node?branch=master
+[coverage-image]: https://coveralls.io/repos/mguilarducci/tabeliao-node/badge.svg?branch=master&service=github
+[dependencies-url]: https://david-dm.org/mguilarducci/tabeliao-node
+[dependencies-image]: https://david-dm.org/mguilarducci/tabeliao-node.svg
+[dependencies-dev-url]: https://david-dm.org/mguilarducci/tabeliao-node#info=devDependencies&view=table
+[dependencies-dev-image]: https://david-dm.org/mguilarducci/tabeliao-node/dev-status.svg
