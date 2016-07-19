@@ -1,5 +1,13 @@
 language: node_js
 node_js:
-  - "6"
-  - "6.1"
-  - "6.2"
+- '6'
+- '6.1'
+- '6.2'
+deploy:
+  provider: npm
+  email: mguilarducci@gmail.com
+  api_key:
+    secure: a/9QXR5A1vUFQdO9b7slOjNgyaWvn9CZHm3uirl1R4iW5+8bhcdXFw/2BiDJu6jOw0FeaTBTmI9DtqHyRqA1Ccf5O65BwG/fJqUjOmgPWLItHLyeb+n0AzQuF0Ia4Y+ln4Sri5mvs8tIGSGU0M6gY+XZSo3wGtkqwZ/4x3Bgh6HOQZTIHiGOkm1pQ6Y0K9G9FXYTBaMiiiKwPmnf9IDyGkciDvrvF18cwYS8LpgRE+xnxP1uL7tb2fXxp7+RZTzfrSsc6K49rYyWlySLYd0oXDA3fmBf3kkSj5p09Nusrq+FJMgkmeP+0gJagjZ+Fez0AZ8AcpndsHY6GT3eSOH1B2HqpCt0p3s6+3Yx0yTMgHornUZZcW+UoXihPk9+/AAHjjq40aDEfJRoJN1VyHHewJ+Y2S4LX0iWOyhMm5VBO5laGQ6CXN7qTTEIhsw4aagPx9K8W7qYaLuaZEgSpiluZHipEAlppswpogZFW1hMMvo3H1zlNEHhG2xebKhyI+Y0bQzwAtiC2vqIjLxs/ZYmiKvRktzWuYtDpIp6THJtB88CuD0w4Dwhl+S2tb/9fo5YUZyNMIu4TKo0+PXTjJreHPyNAw0V9LXirZeXyclEuiqLTOyUTlKenQl1abnt0U3ngQM7vUvaICnfHIxvX8N2uEf3UrNx02YxTFME7pDkLpY=
+  on:
+    tags: true
+    repo: mguilarducci/tabeliao-node
